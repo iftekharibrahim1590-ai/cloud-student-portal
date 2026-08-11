@@ -1,0 +1,44 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+
+# --- Secrets ---
+# Runtime configuration is injected by the platform (Render envVars or
+# `docker run -e`). Nothing to exclude here — repo-level .gitignore already
+# keeps local dotfiles out of the build context.
+!.env.example
+
+# --- Node / frontend (only the proxy is used locally, not in prod image) ---
+frontend/
+node_modules/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# --- Git / CI ---
+.git
+.gitignore
+.github/
+
+# --- Docs / tests (kept out of runtime image) ---
+tests/
+test_reports/
+memory/
+scripts/
+*.md
+!README.md
+
+# --- Logs ---
+*.log
+logs/

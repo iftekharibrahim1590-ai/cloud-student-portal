@@ -1,0 +1,39 @@
+# Render Blueprint — one-click deploy for Cloud Student Portal.
+# Push this file to your repo root and click "New → Blueprint" in Render.
+#
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  - type: web
+    name: cloud-student-portal
+    runtime: docker
+    plan: free                     # bump to `starter` for always-on
+    region: oregon                 # change to your closest region
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true               # redeploy on every push
+    envVars:
+      # ---- REQUIRED ---------------------------------------------------------
+      # Your MongoDB Atlas SRV connection string.
+      # Set this value from Render Dashboard → Environment (marked sync:false
+      # so it never gets committed to git).
+      - key: MONGO_URL
+        sync: false
+
+      # ---- Convenience ------------------------------------------------------
+      - key: DB_NAME
+        value: cloud_student_portal
+
+      # SECRET_KEY: Render will generate a strong random value for you and
+      # store it as an encrypted env var. Never share it.
+      - key: SECRET_KEY
+        generateValue: true
+
+      # CORS is not consumed by Flask templates but kept for API compatibility.
+      - key: CORS_ORIGINS
+        value: "*"
+
+      # Optional — tune gunicorn without rebuilding the image.
+      - key: WEB_CONCURRENCY
+        value: "2"

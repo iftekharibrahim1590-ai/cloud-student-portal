@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Cloud Student Portal — Manage students in the cloud{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="csp-hero">
+  <div class="csp-hero-grid"></div>
+  <div class="container csp-hero-inner">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <span class="csp-pill" data-testid="hero-pill">
+          <i class="fa-solid fa-bolt"></i>
+          <span class="csp-mono">v1.0</span>
+          <span>&nbsp;·&nbsp;built for engineering campuses</span>
+        </span>
+        <h1 class="csp-hero-title mt-3" data-testid="hero-title">
+          Student data,<br />
+          <span class="csp-gradient-text">rethought for the cloud.</span>
+        </h1>
+        <p class="csp-hero-sub" data-testid="hero-sub">
+          A production-ready portal that replaces spreadsheets with a fast,
+          secure MongoDB-backed workspace. Manage students, courses, and
+          activity from one clean dashboard.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="{{ url_for('auth.register') }}" class="btn csp-btn-primary btn-lg" data-testid="hero-cta-register">
+            Create free account <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+          <a href="{{ url_for('auth.login') }}" class="btn csp-btn-ghost btn-lg" data-testid="hero-cta-login">
+            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign in
+          </a>
+        </div>
+        <div class="csp-hero-meta mt-4">
+          <div><span class="csp-mono csp-accent">99.9%</span> uptime target</div>
+          <div><span class="csp-mono csp-accent">&lt; 50ms</span> query latency</div>
+          <div><span class="csp-mono csp-accent">bcrypt</span> secured auth</div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="csp-card-preview" data-testid="hero-preview">
+          <div class="csp-card-preview-header">
+            <span class="csp-dot csp-dot-red"></span>
+            <span class="csp-dot csp-dot-amber"></span>
+            <span class="csp-dot csp-dot-green"></span>
+            <span class="ms-2 csp-mono">dashboard.csp</span>
+          </div>
+          <div class="csp-card-preview-body">
+            <div class="csp-stat-row">
+              <div class="csp-stat-mini"><span class="csp-mono csp-accent">128</span><small>students</small></div>
+              <div class="csp-stat-mini"><span class="csp-mono csp-accent">14</span><small>courses</small></div>
+              <div class="csp-stat-mini"><span class="csp-mono csp-accent">3.2k</span><small>events</small></div>
+            </div>
+            <div class="csp-bar-wrap mt-3">
+              <div class="csp-bar" style="width: 82%"></div>
+              <div class="csp-bar-label"><span>Enrollment health</span><span class="csp-mono">82%</span></div>
+            </div>
+            <div class="csp-bar-wrap">
+              <div class="csp-bar csp-bar-alt" style="width: 64%"></div>
+              <div class="csp-bar-label"><span>Course coverage</span><span class="csp-mono">64%</span></div>
+            </div>
+            <div class="csp-bar-wrap">
+              <div class="csp-bar" style="width: 91%"></div>
+              <div class="csp-bar-label"><span>Data integrity</span><span class="csp-mono">91%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="csp-section">
+  <div class="container">
+    <div class="row align-items-end mb-5">
+      <div class="col-md-8">
+        <span class="csp-eyebrow"><i class="fa-solid fa-layer-group"></i> Features</span>
+        <h2 class="csp-section-title" data-testid="features-title">Everything a modern campus office needs.</h2>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <span class="csp-mono csp-muted">// phase&nbsp;1&nbsp;shipped</span>
+      </div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-feature" data-testid="feature-auth">
+          <div class="csp-feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <h5>Secure Auth</h5>
+          <p>bcrypt-hashed passwords, HTTP-only sessions, duplicate-email guard.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-feature" data-testid="feature-dashboard">
+          <div class="csp-feature-icon"><i class="fa-solid fa-gauge-high"></i></div>
+          <h5>Live Dashboard</h5>
+          <p>Users, students, courses and activity — all in one glance.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-feature" data-testid="feature-mongo">
+          <div class="csp-feature-icon"><i class="fa-solid fa-database"></i></div>
+          <h5>MongoDB Atlas ready</h5>
+          <p>Swap the URI and go global. Schema-flexible collections built in.</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-feature" data-testid="feature-crud">
+          <div class="csp-feature-icon"><i class="fa-solid fa-user-graduate"></i></div>
+          <h5>Student CRUD <span class="csp-tag">phase 2</span></h5>
+          <p>Add, edit, search & paginate students with a clean UI.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="csp-section csp-section-alt">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <span class="csp-eyebrow"><i class="fa-solid fa-circle-info"></i> About</span>
+        <h2 class="csp-section-title" data-testid="about-title">Built as a capstone. Ready for production.</h2>
+        <p class="csp-lead">
+          Cloud Student Portal is a Flask + MongoDB application designed
+          for final-year engineering projects — clean, modular, and easy
+          to deploy on Render or any container platform.
+        </p>
+        <ul class="csp-checklist">
+          <li><i class="fa-solid fa-check"></i> Blueprint-based Flask backend</li>
+          <li><i class="fa-solid fa-check"></i> Jinja2 + Bootstrap 5 templates</li>
+          <li><i class="fa-solid fa-check"></i> Environment-driven config (.env)</li>
+          <li><i class="fa-solid fa-check"></i> Docker + Render deployment (phase&nbsp;2)</li>
+        </ul>
+      </div>
+      <div class="col-lg-6">
+        <div class="csp-code-block" data-testid="about-code">
+          <div class="csp-code-head">
+            <span class="csp-mono">GET /api/health</span>
+            <span class="csp-code-status">200 OK</span>
+          </div>
+<pre class="csp-code"><code>{
+  "status": "ok",
+  "app":    "Cloud Student Portal",
+  "stack":  ["Flask", "MongoDB", "Bootstrap 5"],
+  "phase":  1
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="csp-section">
+  <div class="container">
+    <div class="csp-contact-card">
+      <div class="row align-items-center g-4">
+        <div class="col-md-7">
+          <span class="csp-eyebrow"><i class="fa-solid fa-envelope"></i> Contact</span>
+          <h2 class="csp-section-title mb-2" data-testid="contact-title">Have questions or feedback?</h2>
+          <p class="csp-muted mb-0">Reach out and we'll get back within one business day.</p>
+        </div>
+        <div class="col-md-5 text-md-end">
+          <a href="mailto:ibrahim@cloud.com" class="btn csp-btn-primary btn-lg" data-testid="contact-cta">
+            <i class="fa-solid fa-paper-plane me-2"></i> ibrahim@cloud.com
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

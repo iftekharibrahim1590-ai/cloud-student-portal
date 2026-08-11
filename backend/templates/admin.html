@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Monitoring — Cloud Student Portal{% endblock %}
+
+{% block content %}
+<section class="csp-page">
+  <div class="container">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div>
+        <span class="csp-eyebrow"><i class="fa-solid fa-satellite-dish"></i> Admin · Monitoring</span>
+        <h1 class="csp-dashboard-title" data-testid="admin-title">System health</h1>
+        <p class="csp-muted mb-0">Live metrics from Atlas & this Flask process.</p>
+      </div>
+      <div class="mt-3 mt-md-0">
+        <span class="csp-chip csp-chip-accent" data-testid="admin-status">
+          <i class="fa-solid fa-circle csp-live-dot me-1"></i> {{ metrics.app_status }}
+        </span>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-stat-card" data-testid="admin-stat-users">
+          <div class="csp-stat-icon"><i class="fa-solid fa-users"></i></div>
+          <div class="csp-stat-value csp-mono">{{ metrics.total_users }}</div>
+          <div class="csp-stat-label">Total users</div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-stat-card" data-testid="admin-stat-students">
+          <div class="csp-stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
+          <div class="csp-stat-value csp-mono">{{ metrics.total_students }}</div>
+          <div class="csp-stat-label">Total students</div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-stat-card" data-testid="admin-stat-courses">
+          <div class="csp-stat-icon"><i class="fa-solid fa-book-open"></i></div>
+          <div class="csp-stat-value csp-mono">{{ metrics.total_courses }}</div>
+          <div class="csp-stat-label">Total courses</div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-stat-card csp-stat-card-accent" data-testid="admin-stat-sessions">
+          <div class="csp-stat-icon"><i class="fa-solid fa-plug-circle-bolt"></i></div>
+          <div class="csp-stat-value csp-mono">{{ metrics.active_sessions }}</div>
+          <div class="csp-stat-label">Active sessions (30m)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-md-4">
+        <div class="csp-panel h-100" data-testid="admin-uptime">
+          <div class="csp-panel-head"><h5 class="mb-0"><i class="fa-solid fa-clock me-2"></i>Server uptime</h5></div>
+          <div class="csp-metric-big csp-mono csp-accent">{{ csp_uptime() }}</div>
+          <p class="csp-muted mb-0"><span class="csp-mono">since:</span> {{ metrics.server_time }}</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="csp-panel h-100" data-testid="admin-requests">
+          <div class="csp-panel-head"><h5 class="mb-0"><i class="fa-solid fa-arrow-right-arrow-left me-2"></i>Request counter</h5></div>
+          <div class="csp-metric-big csp-mono csp-accent">{{ csp_requests() }}</div>
+          <p class="csp-muted mb-0">HTTP requests served since app start.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="csp-panel h-100" data-testid="admin-appstatus">
+          <div class="csp-panel-head"><h5 class="mb-0"><i class="fa-solid fa-heart-pulse me-2"></i>Application status</h5></div>
+          <div class="csp-metric-big csp-mono" style="color: var(--csp-ok);">{{ metrics.app_status }}</div>
+          <p class="csp-muted mb-0">Flask + PyMongo + Atlas · v2.0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-lg-6">
+        <div class="csp-panel" data-testid="admin-chart-departments">
+          <div class="csp-panel-head">
+            <h5 class="mb-0"><i class="fa-solid fa-chart-pie me-2"></i>Students by department</h5>
+          </div>
+          <canvas id="deptChart" height="220"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="csp-panel" data-testid="admin-chart-activity">
+          <div class="csp-panel-head">
+            <h5 class="mb-0"><i class="fa-solid fa-chart-line me-2"></i>Activity — last 7 days</h5>
+          </div>
+          <canvas id="activityChart" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  const CSS_ACCENT = getComputedStyle(document.documentElement).getPropertyValue('--csp-accent').trim() || '#22D3EE';
+  const CSS_PRIMARY = getComputedStyle(document.documentElement).getPropertyValue('--csp-primary').trim() || '#38BDF8';
+  const CSS_MUTED = getComputedStyle(document.documentElement).getPropertyValue('--csp-muted').trim() || '#8CA0BE';
+  const CSS_LINE = getComputedStyle(document.documentElement).getPropertyValue('--csp-line').trim() || '#1E3557';
+
+  Chart.defaults.color = CSS_MUTED;
+  Chart.defaults.borderColor = CSS_LINE;
+  Chart.defaults.font.family = "'IBM Plex Sans', system-ui, sans-serif";
+
+  const PALETTE = ['#22D3EE', '#38BDF8', '#A5F3FC', '#34D399', '#FBBF24', '#F87171', '#818CF8', '#F472B6'];
+
+  const deptLabels = {{ charts.dept_labels|safe }};
+  const deptValues = {{ charts.dept_values|safe }};
+  const actLabels  = {{ charts.activity_labels|safe }};
+  const actValues  = {{ charts.activity_values|safe }};
+
+  if (deptLabels.length) {
+    new Chart(document.getElementById('deptChart'), {
+      type: 'doughnut',
+      data: {
+        labels: deptLabels,
+        datasets: [{
+          data: deptValues,
+          backgroundColor: deptLabels.map((_, i) => PALETTE[i % PALETTE.length]),
+          borderColor: '#0B1220',
+          borderWidth: 3,
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { position: 'bottom', labels: { padding: 14, boxWidth: 12 } }
+        },
+        cutout: '58%',
+      }
+    });
+  } else {
+    document.getElementById('deptChart').replaceWith(Object.assign(document.createElement('p'), {
+      textContent: 'No student data yet.',
+      className: 'csp-muted mb-0 py-4 text-center'
+    }));
+  }
+
+  new Chart(document.getElementById('activityChart'), {
+    type: 'bar',
+    data: {
+      labels: actLabels,
+      datasets: [{
+        label: 'Events',
+        data: actValues,
+        backgroundColor: CSS_ACCENT,
+        borderRadius: 8,
+        maxBarThickness: 28,
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false } },
+        y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: CSS_LINE } }
+      }
+    }
+  });
+})();
+</script>
+{% endblock %}

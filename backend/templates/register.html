@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Register — Cloud Student Portal{% endblock %}
+
+{% block content %}
+<section class="csp-auth-wrap">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-5">
+        <div class="csp-auth-card" data-testid="register-card">
+          <div class="text-center mb-4">
+            <div class="csp-auth-mark"><i class="fa-solid fa-user-plus"></i></div>
+            <h1 class="csp-auth-title" data-testid="register-title">Create your account</h1>
+            <p class="csp-muted">Free forever for capstone projects.</p>
+          </div>
+
+          <form method="POST" action="{{ url_for('auth.register') }}" novalidate data-testid="register-form">
+            <div class="mb-3">
+              <label class="form-label csp-mono">full name</label>
+              <input type="text" name="full_name" class="form-control csp-input" placeholder="Jane Doe" value="{{ full_name or '' }}" required data-testid="register-name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">email</label>
+              <input type="email" name="email" class="form-control csp-input" placeholder="you@campus.edu" value="{{ email or '' }}" required data-testid="register-email">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">password</label>
+              <input type="password" name="password" class="form-control csp-input" placeholder="min 6 characters" required data-testid="register-password">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">confirm password</label>
+              <input type="password" name="confirm_password" class="form-control csp-input" placeholder="repeat" required data-testid="register-confirm">
+            </div>
+            <button type="submit" class="btn csp-btn-primary w-100 btn-lg" data-testid="register-submit">
+              Create account <i class="fa-solid fa-arrow-right ms-1"></i>
+            </button>
+          </form>
+
+          <div class="text-center mt-4">
+            <span class="csp-muted">Already have an account?</span>
+            <a href="{{ url_for('auth.login') }}" class="csp-link" data-testid="register-to-login">Sign in</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

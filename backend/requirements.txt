@@ -1,0 +1,27 @@
+# Cloud Student Portal — production requirements
+# (Docker image + Render use this file. Dev environment can install extras
+#  separately; nothing here conflicts with the platform's supervisor setup.)
+
+Flask==3.0.3
+Werkzeug==3.1.8
+Jinja2>=3.1.4
+itsdangerous>=2.2.0
+click>=8.1.7
+
+# MongoDB driver + SRV DNS support (Atlas mongodb+srv:// URIs)
+pymongo==4.6.3
+dnspython>=2.6.1
+
+# Password hashing
+bcrypt==4.1.3
+
+# Environment loading
+python-dotenv>=1.0.1
+
+# WSGI production server
+gunicorn>=21.2.0
+
+# ASGI bridge — required only in dev where supervisor runs uvicorn server:app.
+# Harmless in prod (imported once at module load, never used at request time).
+asgiref==3.8.1
+uvicorn==0.25.0

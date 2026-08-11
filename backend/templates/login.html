@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Sign in — Cloud Student Portal{% endblock %}
+
+{% block content %}
+<section class="csp-auth-wrap">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-5">
+        <div class="csp-auth-card" data-testid="login-card">
+          <div class="text-center mb-4">
+            <div class="csp-auth-mark"><i class="fa-solid fa-cloud"></i></div>
+            <h1 class="csp-auth-title" data-testid="login-title">Welcome back</h1>
+            <p class="csp-muted">Sign in to your Cloud Student Portal account.</p>
+          </div>
+
+          <form method="POST" action="{{ url_for('auth.login') }}" novalidate data-testid="login-form">
+            <div class="mb-3">
+              <label class="form-label csp-mono">email</label>
+              <input type="email" name="email" class="form-control csp-input" placeholder="you@campus.edu" value="{{ email or '' }}" required data-testid="login-email">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">password</label>
+              <input type="password" name="password" class="form-control csp-input" placeholder="••••••••" required data-testid="login-password">
+            </div>
+            <button type="submit" class="btn csp-btn-primary w-100 btn-lg" data-testid="login-submit">
+              Sign in <i class="fa-solid fa-arrow-right ms-1"></i>
+            </button>
+          </form>
+
+          <div class="csp-auth-hint mt-4" data-testid="login-hint">
+            <span class="csp-mono csp-muted">// seeded admin</span><br>
+            <strong>ibrahim@cloud.com</strong> / <strong>admin123</strong>
+          </div>
+
+          <div class="text-center mt-4">
+            <span class="csp-muted">No account?</span>
+            <a href="{{ url_for('auth.register') }}" class="csp-link" data-testid="login-to-register">Create one</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

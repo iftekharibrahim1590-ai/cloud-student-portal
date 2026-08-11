@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}
+{% if mode == 'new' %}Add student{% else %}Edit {{ student.student_id }}{% endif %} — Cloud Student Portal
+{% endblock %}
+
+{% block content %}
+<section class="csp-page">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <a href="{{ url_for('students.list_students') }}" class="csp-link" data-testid="student-form-back">
+            <i class="fa-solid fa-arrow-left me-1"></i> Students
+          </a>
+          <span class="csp-muted">/</span>
+          <span class="csp-mono">{{ 'new' if mode == 'new' else student.student_id }}</span>
+        </div>
+
+        <div class="csp-panel" data-testid="student-form-panel">
+          <div class="csp-panel-head">
+            <h5 class="mb-0">
+              <i class="fa-solid {{ 'fa-user-plus' if mode == 'new' else 'fa-user-pen' }} me-2"></i>
+              {% if mode == 'new' %}Add student{% else %}Edit student{% endif %}
+            </h5>
+            {% if mode == 'edit' %}<span class="csp-chip">{{ student.student_id }}</span>{% endif %}
+          </div>
+
+          <form method="POST" novalidate data-testid="student-form">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label csp-mono">full name</label>
+                <input type="text" name="full_name" class="form-control csp-input"
+                       value="{{ student.full_name if student else '' }}" required
+                       data-testid="student-field-name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label csp-mono">email</label>
+                <input type="email" name="email" class="form-control csp-input"
+                       value="{{ student.email if student else '' }}" required
+                       data-testid="student-field-email">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label csp-mono">phone</label>
+                <input type="text" name="phone" class="form-control csp-input"
+                       value="{{ student.phone if student else '' }}" required
+                       data-testid="student-field-phone">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label csp-mono">department</label>
+                <input type="text" name="department" class="form-control csp-input"
+                       value="{{ student.department if student else '' }}" required
+                       data-testid="student-field-department">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label csp-mono">course</label>
+                <select name="course" class="form-select csp-input" required data-testid="student-field-course">
+                  <option value="">— choose —</option>
+                  {% for c in courses %}
+                    <option value="{{ c.course_code }}"
+                      {% if student and student.course == c.course_code %}selected{% endif %}>
+                      {{ c.course_code }} · {{ c.course_name }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label csp-mono">year</label>
+                <select name="year" class="form-select csp-input" required data-testid="student-field-year">
+                  <option value="">—</option>
+                  {% for y in [1, 2, 3, 4] %}
+                    <option value="{{ y }}" {% if student and student.year|int == y %}selected{% endif %}>Year {{ y }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+              <button type="submit" class="btn csp-btn-primary" data-testid="student-form-submit">
+                <i class="fa-solid fa-check me-1"></i>
+                {% if mode == 'new' %}Create student{% else %}Save changes{% endif %}
+              </button>
+              <a href="{{ url_for('students.list_students') }}" class="btn csp-btn-ghost" data-testid="student-form-cancel">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

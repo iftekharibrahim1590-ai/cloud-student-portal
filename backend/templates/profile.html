@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Profile — Cloud Student Portal{% endblock %}
+
+{% block content %}
+<section class="csp-page">
+  <div class="container">
+
+    <div class="mb-4">
+      <span class="csp-eyebrow"><i class="fa-solid fa-id-card"></i> Profile</span>
+      <h1 class="csp-dashboard-title" data-testid="profile-title">Your account</h1>
+      <p class="csp-muted mb-0">Update your name or change your password.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="csp-panel" data-testid="profile-info-panel">
+          <div class="csp-panel-head">
+            <h5 class="mb-0"><i class="fa-solid fa-user-pen me-2"></i>Profile details</h5>
+          </div>
+          <form method="POST" action="{{ url_for('profile.update_profile') }}" data-testid="profile-info-form">
+            <div class="mb-3">
+              <label class="form-label csp-mono">full name</label>
+              <input type="text" name="full_name" class="form-control csp-input"
+                     value="{{ user_doc.full_name }}" required data-testid="profile-field-name">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">email</label>
+              <input type="email" class="form-control csp-input" value="{{ user_doc.email }}" disabled data-testid="profile-field-email">
+              <small class="csp-muted">Email is your identity — can't be changed.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">role</label>
+              <input type="text" class="form-control csp-input" value="{{ user_doc.role }}" disabled data-testid="profile-field-role">
+            </div>
+            <button type="submit" class="btn csp-btn-primary" data-testid="profile-info-submit">
+              <i class="fa-solid fa-check me-1"></i> Save profile
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="csp-panel" data-testid="profile-password-panel">
+          <div class="csp-panel-head">
+            <h5 class="mb-0"><i class="fa-solid fa-key me-2"></i>Change password</h5>
+          </div>
+          <form method="POST" action="{{ url_for('profile.change_password') }}" data-testid="profile-password-form">
+            <div class="mb-3">
+              <label class="form-label csp-mono">current password</label>
+              <input type="password" name="current_password" class="form-control csp-input" required data-testid="profile-current-password">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">new password</label>
+              <input type="password" name="new_password" class="form-control csp-input" placeholder="min 6 characters" required data-testid="profile-new-password">
+            </div>
+            <div class="mb-3">
+              <label class="form-label csp-mono">confirm new password</label>
+              <input type="password" name="confirm_password" class="form-control csp-input" required data-testid="profile-confirm-password">
+            </div>
+            <button type="submit" class="btn csp-btn-primary" data-testid="profile-password-submit">
+              <i class="fa-solid fa-shield-halved me-1"></i> Change password
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

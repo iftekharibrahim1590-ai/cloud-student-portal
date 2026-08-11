@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Students — Cloud Student Portal{% endblock %}
+
+{% block content %}
+<section class="csp-page">
+  <div class="container">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div>
+        <span class="csp-eyebrow"><i class="fa-solid fa-user-graduate"></i> Students</span>
+        <h1 class="csp-dashboard-title" data-testid="students-title">Student directory</h1>
+        <p class="csp-muted mb-0">
+          <span class="csp-mono">total:</span> {{ total }} ·
+          <span class="csp-mono">page:</span> {{ page }}/{{ pages }}
+        </p>
+      </div>
+      <div class="mt-3 mt-md-0">
+        <a href="{{ url_for('students.add_student') }}" class="btn csp-btn-primary" data-testid="students-add-btn">
+          <i class="fa-solid fa-user-plus me-1"></i> Add student
+        </a>
+      </div>
+    </div>
+
+    <div class="csp-panel mb-4" data-testid="students-search-panel">
+      <form method="GET" action="{{ url_for('students.list_students') }}" class="row g-2 align-items-end">
+        <div class="col-md-9">
+          <label class="form-label csp-mono">search</label>
+          <input type="search" name="q" value="{{ q }}" placeholder="Name, email, ID, department, course code…"
+                 class="form-control csp-input" data-testid="students-search-input">
+        </div>
+        <div class="col-md-3 d-grid">
+          <button type="submit" class="btn csp-btn-primary" data-testid="students-search-submit">
+            <i class="fa-solid fa-magnifying-glass me-1"></i> Search
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="csp-panel" data-testid="students-table-panel">
+      {% if students %}
+      <div class="table-responsive">
+        <table class="table csp-table align-middle mb-0">
+          <thead>
+            <tr>
+              <th class="csp-mono">id</th>
+              <th class="csp-mono">name</th>
+              <th class="csp-mono">email</th>
+              <th class="csp-mono">phone</th>
+              <th class="csp-mono">course</th>
+              <th class="csp-mono">year</th>
+              <th class="csp-mono">department</th>
+              <th class="text-end csp-mono">actions</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for s in students %}
+            <tr data-testid="student-row-{{ s.student_id }}">
+              <td><span class="csp-chip">{{ s.student_id }}</span></td>
+              <td><strong>{{ s.full_name }}</strong></td>
+              <td class="csp-mono csp-muted">{{ s.email }}</td>
+              <td class="csp-mono">{{ s.phone }}</td>
+              <td><span class="csp-chip csp-chip-accent">{{ s.course }}</span></td>
+              <td class="csp-mono">Y{{ s.year }}</td>
+              <td>{{ s.department }}</td>
+              <td class="text-end">
+                <a href="{{ url_for('students.edit_student', sid=s.student_id) }}"
+                   class="btn btn-sm csp-btn-ghost me-1" data-testid="student-edit-{{ s.student_id }}">
+                  <i class="fa-solid fa-pen"></i>
+                </a>
+                <form method="POST" action="{{ url_for('students.delete_student', sid=s.student_id, q=q, page=page) }}" class="d-inline"
+                      onsubmit="return confirm('Delete student {{ s.student_id }}?');">
+                  <button type="submit" class="btn btn-sm csp-btn-danger" data-testid="student-delete-{{ s.student_id }}">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      {% if pages > 1 %}
+      <nav class="d-flex justify-content-between align-items-center mt-3" data-testid="students-pagination">
+        <span class="csp-mono csp-muted">
+          showing {{ (page-1)*page_size + 1 }}–{{ (page-1)*page_size + students|length }} of {{ total }}
+        </span>
+        <ul class="pagination csp-pagination mb-0">
+          <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('students.list_students', q=q, page=page-1) }}" data-testid="pagination-prev">
+              <i class="fa-solid fa-chevron-left"></i>
+            </a>
+          </li>
+          {% for p in range(1, pages+1) %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+              <a class="page-link" href="{{ url_for('students.list_students', q=q, page=p) }}" data-testid="pagination-page-{{ p }}">{{ p }}</a>
+            </li>
+          {% endfor %}
+          <li class="page-item {% if page >= pages %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for('students.list_students', q=q, page=page+1) }}" data-testid="pagination-next">
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      {% endif %}
+
+      {% else %}
+      <div class="text-center py-5" data-testid="students-empty">
+        <div class="csp-empty-icon"><i class="fa-solid fa-user-slash"></i></div>
+        <h5>No students found</h5>
+        <p class="csp-muted">
+          {% if q %}
+            Try a different search term or
+            <a href="{{ url_for('students.list_students') }}" class="csp-link">clear the filter</a>.
+          {% else %}
+            Add your first student to get started.
+          {% endif %}
+        </p>
+        <a href="{{ url_for('students.add_student') }}" class="btn csp-btn-primary mt-2">
+          <i class="fa-solid fa-user-plus me-1"></i> Add student
+        </a>
+      </div>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+{% endblock %}

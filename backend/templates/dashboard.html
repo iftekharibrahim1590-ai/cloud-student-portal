@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Cloud Student Portal{% endblock %}
+
+{% block content %}
+<section class="csp-dashboard">
+  <div class="container">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4">
+      <div>
+        <span class="csp-eyebrow"><i class="fa-solid fa-gauge-high"></i> Dashboard</span>
+        <h1 class="csp-dashboard-title" data-testid="dashboard-title">
+          Welcome, <span class="csp-gradient-text">{{ user.full_name }}</span>
+        </h1>
+        <p class="csp-muted mb-0">
+          <span class="csp-mono">role:</span> {{ user.role }} ·
+          <span class="csp-mono">server:</span> {{ stats.server_time }}
+        </p>
+      </div>
+      <div class="mt-3 mt-md-0 d-flex flex-wrap gap-2">
+        <a href="{{ url_for('students.add_student') }}" class="btn csp-btn-primary" data-testid="quick-add-student"><i class="fa-solid fa-user-plus me-1"></i>Add student</a>
+        <a href="{{ url_for('courses.add_course') }}" class="btn csp-btn-ghost" data-testid="quick-add-course"><i class="fa-solid fa-book me-1"></i>Add course</a>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <a href="{{ url_for('admin.monitoring') if user.role == 'admin' else url_for('dashboard.dashboard') }}" class="csp-stat-card d-block text-decoration-none text-reset" data-testid="stat-users">
+          <div class="csp-stat-icon"><i class="fa-solid fa-users"></i></div>
+          <div class="csp-stat-value csp-mono">{{ stats.total_users }}</div>
+          <div class="csp-stat-label">Total users</div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="{{ url_for('students.list_students') }}" class="csp-stat-card d-block text-decoration-none text-reset" data-testid="stat-students">
+          <div class="csp-stat-icon"><i class="fa-solid fa-user-graduate"></i></div>
+          <div class="csp-stat-value csp-mono">{{ stats.total_students }}</div>
+          <div class="csp-stat-label">Total students</div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="{{ url_for('courses.list_courses') }}" class="csp-stat-card d-block text-decoration-none text-reset" data-testid="stat-courses">
+          <div class="csp-stat-icon"><i class="fa-solid fa-book-open"></i></div>
+          <div class="csp-stat-value csp-mono">{{ stats.total_courses }}</div>
+          <div class="csp-stat-label">Total courses</div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="csp-stat-card csp-stat-card-accent" data-testid="stat-status">
+          <div class="csp-stat-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+          <div class="csp-stat-value csp-mono">Online</div>
+          <div class="csp-stat-label">Application status</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4 mt-1">
+      <div class="col-lg-7">
+        <div class="csp-panel" data-testid="activity-panel">
+          <div class="csp-panel-head">
+            <h5 class="mb-0"><i class="fa-solid fa-wave-square me-2"></i>Recent activity</h5>
+            <span class="csp-mono csp-muted">live · atlas</span>
+          </div>
+          {% if activities %}
+          <ul class="csp-activity-list">
+            {% for a in activities %}
+            <li>
+              <span class="csp-activity-icon"><i class="fa-solid {{ a.icon }}"></i></span>
+              <div class="flex-grow-1">
+                <div>{{ a.description }}</div>
+                <small class="csp-mono csp-muted">{{ a.actor_email }} · {{ a.time }}</small>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="csp-muted mb-0">No activity yet. Add a student or course to see the feed light up.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="csp-panel" data-testid="quick-panel">
+          <div class="csp-panel-head">
+            <h5 class="mb-0"><i class="fa-solid fa-bolt me-2"></i>Quick actions</h5>
+          </div>
+          <div class="csp-quick-grid">
+            <a href="{{ url_for('students.list_students') }}" class="csp-quick" data-testid="quick-students">
+              <i class="fa-solid fa-user-graduate"></i>
+              <span>Manage students</span>
+            </a>
+            <a href="{{ url_for('courses.list_courses') }}" class="csp-quick" data-testid="quick-courses">
+              <i class="fa-solid fa-book"></i>
+              <span>Manage courses</span>
+            </a>
+            <a href="{{ url_for('profile.profile') }}" class="csp-quick" data-testid="quick-profile">
+              <i class="fa-solid fa-id-card"></i>
+              <span>Profile & security</span>
+            </a>
+            {% if user.role == 'admin' %}
+            <a href="{{ url_for('admin.monitoring') }}" class="csp-quick" data-testid="quick-monitoring">
+              <i class="fa-solid fa-satellite-dish"></i>
+              <span>Monitoring</span>
+            </a>
+            {% else %}
+            <a href="{{ url_for('main.home') }}#features" class="csp-quick" data-testid="quick-features">
+              <i class="fa-solid fa-layer-group"></i>
+              <span>Explore features</span>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

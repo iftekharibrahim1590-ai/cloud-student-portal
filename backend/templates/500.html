@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}500 — Something broke{% endblock %}
+
+{% block content %}
+<section class="csp-error-page">
+  <div class="container text-center">
+    <div class="csp-error-code csp-mono csp-gradient-text">500</div>
+    <h1 class="csp-dashboard-title">A storm hit our servers.</h1>
+    <p class="csp-muted mx-auto" style="max-width: 480px;">
+      Something went wrong on our end. We've logged it — try again in a moment.
+    </p>
+    <div class="d-flex justify-content-center gap-2 mt-4">
+      <a href="{{ url_for('main.home') }}" class="btn csp-btn-primary" data-testid="err-home"><i class="fa-solid fa-house me-1"></i> Back home</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

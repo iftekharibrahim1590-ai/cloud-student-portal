@@ -136,8 +136,9 @@ Open **http://localhost:8000**. On first boot the app **auto-seeds** the
 admin user + 5 courses + 10 sample students. Log in with:
 
 ```
-Email:    ibrahim@cloud.com
-Password: admin123
+For security, default credentials are not published in this repository.
+Set or change the administrator credentials through the application's
+secure configuration/seed process before deployment.
 ```
 
 > **Windows users** who can't run gunicorn: use `waitress-serve --port=8000 wsgi:app`

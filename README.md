@@ -133,7 +133,7 @@ gunicorn --bind 0.0.0.0:8000 wsgi:app
 ```
 
 Open **http://localhost:8000**. On first boot the app **auto-seeds** the
-admin user + 5 courses + 10 sample students. Log in with:
+admin user + 5 courses + 10 sample students. 
 
 ```
 For security, default credentials are not published in this repository.
